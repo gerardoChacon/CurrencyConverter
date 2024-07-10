@@ -9,7 +9,7 @@ import java.net.http.HttpResponse;
 
 public class CurrencyConsult {
 
-    CurrencyValue searchCurrencys(String baseCurrency, String targetCurrency) {
+    public CurrencyValue searchCurrencys(String baseCurrency, String targetCurrency) {
 
         String direction = "https://v6.exchangerate-api.com/v6/e3219568bdd4b99a7c22f5f9/pair/"
                 + baseCurrency + "/" + targetCurrency;
@@ -19,14 +19,14 @@ public class CurrencyConsult {
                 .uri(URI.create(direction))
                 .build();
 
-        HttpResponse<String> response;
         try {
+            HttpResponse<String> response;
             response = client
                     .send(request, HttpResponse.BodyHandlers.ofString());
-
+            return new Gson().fromJson(response.body(), CurrencyValue.class);
         } catch (IOException | InterruptedException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("No encontré ese tipo de cambio");
         }
-        return new Gson().fromJson(response.body(), CurrencyValue.class);
+
     }
 }

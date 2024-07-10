@@ -2,17 +2,12 @@ import java.math.BigDecimal;
 import java.util.Scanner;
 
 public class Main {
+    private static Scanner keyboard = new Scanner(System.in);
+
     public static void main(String[] args) {
+        int option;
 
-        Scanner keyboard = new Scanner(System.in);
-
-
-        System.out.println("Choose a valid option: ");
-
-
-        do{
-
-
+        do {
             System.out.println("""
                     0.- Exit
                     1.- USD => MXN
@@ -24,35 +19,58 @@ public class Main {
                     7.- MXN => BRL
                     8.- BRL => MXN
                     9.- USD => BRL
-                    10.-BRL => USD
+                    10.- BRL => USD
                     """);
-            var option = keyboard.nextInt();
-            switch (option){
+            option = keyboard.nextInt();
 
-                case 0:
-                    break;
-                case 1:
+            // Handle exit immediately
+            if (option == 0) break;
 
-            } while(option != 0)
+            // Perform conversion if option is valid
+            if (option > 0 && option <= 10) {
+                handleOption(option);
+            } else {
+                System.out.println("Please select a valid option.");
+            }
 
-            System.out.println("Insert the amount you want to convert");
-            var amount = keyboard.nextInt();
-            if (amount > 0){
-                CurrencyConsult consult = new CurrencyConsult();
-                CurrencyValue currency =  consult.searchCurrencys("USD", "MXN");
-                BigDecimal currencyAmount = currency.getConversionRate();
-                System.out.println(currencyAmount.multiply(BigDecimal.valueOf(amount)));
-            } else
-                System.out.println("Invalid number");
+        } while (option != 0);
+
+        keyboard.close();
+    }
+
+    private static void handleOption(int option) {
+        String baseCurrency = "", targetCurrency = "";
+
+        switch (option) {
+            case 1 -> { baseCurrency = "USD"; targetCurrency = "MXN"; }
+            case 2 -> { baseCurrency = "MXN"; targetCurrency = "USD"; }
+            case 3 -> { baseCurrency = "MXN"; targetCurrency = "ARS"; }
+            case 4 -> { baseCurrency = "ARS"; targetCurrency = "MXN"; }
+            case 5 -> { baseCurrency = "USD"; targetCurrency = "ARS"; }
+            case 6 -> { baseCurrency = "ARS"; targetCurrency = "USD"; }
+            case 7 -> { baseCurrency = "MXN"; targetCurrency = "BRL"; }
+            case 8 -> { baseCurrency = "BRL"; targetCurrency = "MXN"; }
+            case 9 -> { baseCurrency = "USD"; targetCurrency = "BRL"; }
+            case 10 -> { baseCurrency = "BRL"; targetCurrency = "USD"; }
         }
 
 
+        if (!baseCurrency.isEmpty()) {
+            performConversion(baseCurrency, targetCurrency);
+        }
+    }
 
+    private static void performConversion(String baseCurrency, String targetCurrency) {
+        System.out.println("Insert the amount you want to convert:");
+        int amount = keyboard.nextInt();
 
-
-
-
-
-
+        if (amount > 0) {
+            CurrencyConsult consult = new CurrencyConsult();
+            CurrencyValue currency = consult.searchCurrencys(baseCurrency, targetCurrency);
+            BigDecimal currencyAmount = currency.getConversionRate();
+            System.out.println("Converted Amount: $" + currencyAmount.multiply(BigDecimal.valueOf(amount)));
+        } else {
+            System.out.println("Invalid number");
+        }
     }
 }
