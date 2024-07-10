@@ -9,7 +9,6 @@ public class Main {
 
         do {
             System.out.println("""
-                    0.- Exit
                     1.- USD => MXN
                     2.- MXN => USD
                     3.- MXN => ARS
@@ -19,7 +18,8 @@ public class Main {
                     7.- MXN => BRL
                     8.- BRL => MXN
                     9.- USD => BRL
-                    10.- BRL => USD
+                    10.-BRL => USD
+                    11.-Exit
                     """);
             option = keyboard.nextInt();
 
@@ -33,7 +33,7 @@ public class Main {
                 System.out.println("Please select a valid option.");
             }
 
-        } while (option != 0);
+        } while (option != 11);
 
         keyboard.close();
     }
